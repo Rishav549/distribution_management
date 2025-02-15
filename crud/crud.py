@@ -6,6 +6,8 @@ from schemas.attendance import Attendance_create
 from models.attendance import AttendanceModel
 from schemas.monitor import Monitor_create
 from models.monitor import MonitorModel
+from models.device import DeviceModel
+from schemas.device import Device_create
 
 async def post_employee_details(db: Session, data: Employee_create):
     post_employee_details = UserModel(**data.dict())
@@ -36,3 +38,16 @@ async def post_monitor(db:Session, data: Monitor_create):
 
 async def get_monitor(skip:int, limit: int, db: Session):
     return db.query(MonitorModel).offset(skip).limit(limit).all()
+
+async def post_device(db:Session, data:Device_create):
+    device = DeviceModel(**data.dict())
+    db.add(device)
+    db.commit()
+    db.refresh(device)
+    return device
+
+async def get_device(skip: int, limit:int, db: Session, scan_code: str | None = None):
+    query=db.query(DeviceModel)
+    if scan_code:
+        query=query.filter(DeviceModel.scan_code == scan_code)
+    return query.offset(skip).limit(limit).all()
