@@ -8,6 +8,8 @@ from schemas.monitor import Monitor_create
 from models.monitor import MonitorModel
 from models.device import DeviceModel
 from schemas.device import Device_create
+from schemas.area import AreaCreate
+from models.area import Area
 
 async def post_employee_details(db: Session, data: Employee_create):
     post_employee_details = UserModel(**data.dict())
@@ -51,3 +53,17 @@ async def get_device(skip: int, limit:int, db: Session, scan_code: str | None = 
     if scan_code:
         query=query.filter(DeviceModel.scan_code == scan_code)
     return query.offset(skip).limit(limit).all()
+
+async def post_area(db:Session, data: AreaCreate):
+    area= Area(**data.dict())
+    db.add(area)
+    db.commit()
+    db.refresh(area)
+    return area
+
+async def get_area(skip: int, limit: int, db: Session, area_name: str | None = None):
+    query = db.query(Area)
+    if area_name:
+        query = query.filter(Area.area_name == area_name)
+    return query.offset(skip).limit(limit).all()
+

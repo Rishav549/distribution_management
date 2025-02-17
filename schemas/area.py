@@ -1,3 +1,5 @@
+from pydantic import BaseModel
+
 class Area(BaseModel):
     area_name: str
     city: str
