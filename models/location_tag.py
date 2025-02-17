@@ -8,7 +8,7 @@ class LocationTag(Base):
     id = Column(Integer, primary_key=True, index=True)
     location_code = Column(String, nullable=False, unique=True)
     location_name = Column(String, nullable=False)
-    location_type = Column(String, nullable=False)
+    location_type = Column(Integer, ForeignKey("location_type.id", ondelete="CASCADE"), nullable=False)
     address = Column(String, nullable=False)
     location = Column(String, nullable=False)
     city = Column(String, nullable=False)

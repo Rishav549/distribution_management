@@ -12,6 +12,8 @@ from schemas.area import AreaCreate
 from models.area import Area
 from models.location_type import LocationType
 from schemas.location_type import LocationTypeCreate
+from schemas.location_tag import LocationTagCreate
+from models.location_tag import LocationTag
 
 async def post_employee_details(db: Session, data: Employee_create):
     post_employee_details = UserModel(**data.dict())
@@ -79,3 +81,18 @@ async def post_location_type(db: Session, data: LocationTypeCreate):
 
 async def get_location_types(skip: int, limit: int, db: Session):
     return db.query(LocationType).offset(skip).limit(limit).all()
+
+
+async def post_location_tag(db: Session, data: LocationTagCreate):
+    new_location_tag = LocationTag(**data)
+    db.add(new_location_tag)
+    db.commit()
+    db.refresh(new_location_tag)
+    return new_location_tag
+
+
+async def get_location_tags(db: Session, skip: int = 0, limit: int = 10, area_code: str | None = None):
+    query = db.query(LocationTag)
+    if area_code:
+        query = query.filter(LocationTag.area_code == area_code)
+    return query.offset(skip).limit(limit).all()

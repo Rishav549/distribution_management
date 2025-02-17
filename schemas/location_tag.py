@@ -1,3 +1,5 @@
+from pydantic import BaseModel
+
 class LocationTag(BaseModel):
     location_code: str
     location_name: str
