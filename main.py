@@ -6,6 +6,7 @@ from routes.attendance import router as attendance_router
 from routes.monitor import router as monitor_router
 from routes.device import router as device_router
 from routes.area import router as area_router
+from routes.location_type import router as location_type_router
 from fastapi.staticfiles import StaticFiles
 Base.metadata.create_all(bind=engine)
 
@@ -28,6 +29,7 @@ app.include_router(attendance_router)
 app.include_router(monitor_router)
 app.include_router(device_router)
 app.include_router(area_router)
+app.include_router(location_type_router)
 @app.get("/")
 async def read_root():
     return {"status": "Ok"}

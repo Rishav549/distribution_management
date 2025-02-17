@@ -10,6 +10,8 @@ from models.device import DeviceModel
 from schemas.device import Device_create
 from schemas.area import AreaCreate
 from models.area import Area
+from models.location_type import LocationType
+from schemas.location_type import LocationTypeCreate
 
 async def post_employee_details(db: Session, data: Employee_create):
     post_employee_details = UserModel(**data.dict())
@@ -67,3 +69,13 @@ async def get_area(skip: int, limit: int, db: Session, area_name: str | None = N
         query = query.filter(Area.area_name == area_name)
     return query.offset(skip).limit(limit).all()
 
+
+async def post_location_type(db: Session, data: LocationTypeCreate):
+    location_type = LocationType(**data.dict())
+    db.add(location_type)
+    db.commit()
+    db.refresh(location_type)
+    return location_type
+
+async def get_location_types(skip: int, limit: int, db: Session):
+    return db.query(LocationType).offset(skip).limit(limit).all()
